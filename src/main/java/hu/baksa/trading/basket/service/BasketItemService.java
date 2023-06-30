@@ -32,6 +32,7 @@ public class BasketItemService {
 
     @Transactional
     public SaveBasketItemResponse saveBasketItem(SaveBasketItemRequest request) {
+        // TODO: 2023. 06. 30. basket_item.product_id and basket_item.user_id should be unique together
         BasketItem basketItem = BasketItemMapper.INSTANCE.toBasketItem(request);
 
         // if basket item with a product already exists, then don't create new basket item, just modify the amount
