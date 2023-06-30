@@ -11,8 +11,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
@@ -37,10 +39,18 @@ public class BasketItemService {
         if (maybeBasketItem.isPresent()) {
             basketItem.setId(maybeBasketItem.get().getId());
         }
-        
+
         basketItem.setProduct(Product.builder().id(request.productId()).build());
         basketItem = basketItemRepository.save(basketItem);
 
         return BasketItemMapper.INSTANCE.toSaveBasketItemResponse(basketItem);
+    }
+
+    @Transactional
+    public void deleteBasketItem(Long id) throws NoSuchElementException{
+        if (!basketItemRepository.existsById(id)) {
+            throw new NoSuchElementException(String.format("No basket item with id: %d", id));
+        }
+        basketItemRepository.deleteById(id);
     }
 }
