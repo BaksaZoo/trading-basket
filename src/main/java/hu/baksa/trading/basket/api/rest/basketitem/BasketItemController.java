@@ -1,5 +1,8 @@
-package hu.baksa.trading.basket.api.rest;
+package hu.baksa.trading.basket.api.rest.basketitem;
 
+import hu.baksa.trading.basket.api.rest.basketitem.request.SaveBasketItemRequest;
+import hu.baksa.trading.basket.api.rest.basketitem.response.BasketItemResponse;
+import hu.baksa.trading.basket.api.rest.basketitem.response.SaveBasketItemResponse;
 import hu.baksa.trading.basket.model.BasketItem;
 import hu.baksa.trading.basket.service.BasketItemService;
 import lombok.RequiredArgsConstructor;
@@ -21,19 +24,14 @@ public class BasketItemController {
 
     // TODO: 2023. 06. 30. remove, this is only for testing
     @GetMapping(value = "/api/basket-item", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<BasketItem>> getAll(){
+    public ResponseEntity<List<BasketItemResponse>> getAll(){
         return ResponseEntity.ok(basketItemService.getAllBasketItems());
     }
 
     @PostMapping(value = "/api/basket-item", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BasketItem> post(@RequestBody BasketItem newBasketItem){
-        BasketItem savedbasketItem = basketItemService.saveBasketItemAsNew(newBasketItem);
-        return ResponseEntity.created(
-                ServletUriComponentsBuilder.fromCurrentRequest()
-                        .path("/")
-                        .buildAndExpand(savedbasketItem.getId())
-                        .toUri()
-        ).build();
+    public ResponseEntity<SaveBasketItemResponse> post(@RequestBody SaveBasketItemRequest request){
+        SaveBasketItemResponse response = basketItemService.saveBasketItem(request);
+        return ResponseEntity.created(response.getCreatedUri()).build();
     }
 
 }
