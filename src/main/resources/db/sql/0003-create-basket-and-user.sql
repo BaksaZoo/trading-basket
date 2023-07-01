@@ -2,14 +2,13 @@
 
 -- changeset liquibase:3
 CREATE TABLE users (
-id SERIAL PRIMARY KEY,
-username VARCHAR(30) UNIQUE NOT NULL,
-password VARCHAR(255) NOT NULL
+id UUID PRIMARY KEY,
+username VARCHAR(30) UNIQUE NOT NULL
 );
 
 CREATE TABLE basket (
-  id SERIAL PRIMARY KEY
-  user_id SERIAL UNIQUE NOT NULL,
+  id SERIAL PRIMARY KEY,
+  user_id UUID UNIQUE NOT NULL,
 
   CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
 );

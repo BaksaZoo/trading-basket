@@ -17,4 +17,6 @@ public class BasketItem {
     @OneToOne
     private Product product;
     private int amount;
+    @ManyToOne
+    private Basket basket;
 }
